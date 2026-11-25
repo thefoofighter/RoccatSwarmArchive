@@ -57,6 +57,17 @@ $Mirrors = @{
   Mega       = ''                                                   # https://mega.nz/folder/<id>#<key>
 }
 
+# --- PowerShell 5.1 or later (Windows 7 ships 2.0). Keep this block PowerShell 2.0 syntax. ------
+if ($PSVersionTable.PSVersion.Major -lt 5) {
+  Write-Host "This script needs Windows PowerShell 5.1. This PC has PowerShell $($PSVersionTable.PSVersion)." -ForegroundColor Red
+  Write-Host 'Windows 7 SP1: install these two, restart, then run the command again:'
+  Write-Host '  .NET Framework 4.8:  https://go.microsoft.com/fwlink/?linkid=2088631'
+  Write-Host '  WMF 5.1:             https://www.microsoft.com/download/details.aspx?id=54616'
+  Write-Host '                       (file Win7AndW2K8R2-KB3191566-x64.zip, or -x86 for 32-bit Windows)'
+  Write-Host "Or install by hand, with no script: https://github.com/$Repo#install-by-hand"
+  return
+}
+
 # --- started with "irm <url> | iex"? ------------------------------------------------------------
 # Then there is no script file. Save the script to TEMP and run it as a file in this window:
 # a file can ask for administrator rights, and its errors cannot close this PowerShell window.

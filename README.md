@@ -92,6 +92,29 @@ copy of the archive on disk).
 3. On the other PC, run `install.ps1` from that folder. The script uses the files next to
    it and downloads nothing.
 
+### Windows 7
+
+The devices are standard USB devices, and Swarm 1.9482 should run on Windows 7 SP1: it is
+built with Qt 5 and a bundled Visual C++ 2013 runtime, and it calls no Windows 8 or later
+functions. Nobody has tested it on Windows 7 yet. Older Swarm builds officially supported
+Windows 7.
+
+The script needs Windows PowerShell 5.1, and Windows 7 comes with 2.0:
+
+1. Install [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631) and
+   [Windows Management Framework 5.1](https://www.microsoft.com/download/details.aspx?id=54616)
+   (`Win7AndW2K8R2-KB3191566-x64.zip`, or `-x86` for 32-bit Windows). Restart.
+2. Windows 7 does not switch on TLS 1.2 by itself, so use this command instead of the
+   `irm` one:
+
+   ```powershell
+   [Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1'))
+   ```
+
+Without PowerShell 5.1, the script stops and says what to install. You can also skip the
+script: download the files on another PC (**6 Download only**), copy them over, and
+install by hand (below).
+
 ---
 
 ## Install by hand
@@ -179,7 +202,8 @@ preservation.
 | Problem                                                                       | What to do                                                                                                                                                   |
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | "running scripts is disabled on this system"                                  | Use the `irm` command above, or start a downloaded copy with `powershell -ExecutionPolicy Bypass -File install.ps1`.                                          |
-| "Could not create SSL/TLS secure channel" (old Windows 10)                    | Run `[Net.ServicePointManager]::SecurityProtocol = 'Tls12'` first, then the `irm` command.                                                                    |
+| "Could not create SSL/TLS secure channel" (Windows 7, old Windows 10)         | Use the Windows 7 command above: it switches on TLS 1.2 first.                                                                                               |
+| "Could not establish trust relationship" (Windows 7)                          | The root certificates are out of date. Run Windows Update, or download the files on another PC (**6 Download only**).                                       |
 | A download fails                                                              | The script tries the next mirror. To force one: `-Source ArchiveOrg -NoFallback`.                                                                            |
 | "SHA-256 does not match"                                                      | The mirror sent a damaged or different file. The script deletes it and tries the next mirror.                                                                |
 | "Access denied" when you extract by hand                                      | Use PowerShell or 7-Zip as administrator, or use the script.                                                                                                 |
