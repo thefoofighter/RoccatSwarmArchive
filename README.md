@@ -47,7 +47,7 @@ The menu:
 | ----------------------------- | ---------------------------------------------------------------------------- |
 | 1 Quick setup                 | Swarm (if missing) + the modules for the connected devices                   |
 | 2 Install device modules      | Pick modules from a list (also for devices that are not plugged in)          |
-| 3 Install a Swarm version     | Any of the 23 archived builds. 1.9482 is the one to use                      |
+| 3 Install a Swarm version     | Any of the 24 archived builds. 1.9482 is the one to use                      |
 | 4 Install a standalone driver | Drivers for devices that Swarm never supported, for example the Kave XTD 5.1 |
 | 5 Install an add-on           | ROCCAT Talk FX                                                               |
 | 6 Download only               | Save files to a folder for a PC with no internet                             |
@@ -191,7 +191,7 @@ preservation.
 
 | Release / folder | Contents                                                                                  |
 | ---------------- | ----------------------------------------------------------------------------------------- |
-| `swarm`          | ROCCAT Swarm installers, 23 builds from 1.30 (2015) to 1.9482 (2026)                      |
+| `swarm`          | ROCCAT Swarm installers, 24 builds from 1.30 (2015) to 1.9482 (2026)                      |
 | `modules`        | The 55 device modules from Swarm's update server (plugin DLL, firmware, keyboard layouts) |
 | `drivers`        | Windows drivers for 26 pre-Swarm devices, and the one known macOS driver (Kone XTD)       |
 | `extras`         | Talk FX 2.6, the Power-Grid SDK 1.1, Swarm II, Swarm's self-update package, `aim_roccat`  |
@@ -206,7 +206,8 @@ this README and two maintainer tools.
 Captured 2026-11-19 to 2026-11-21, from Turtle Beach's support CDN, Swarm's auto-update
 service, ROCCAT's legacy CDN (still online), and Wayback Machine copies of
 `media.roccat.org` (Swarm 1.30 to 1.9388, the Mac driver, the Power-Grid SDK, `aim_roccat`).
-One installer, Swarm 1.9477, is a community upload from archive.org. Every archive passes
+Two installers are community uploads from archive.org: Swarm 1.9477, and Swarm 1.9349
+(from the 2019 `roccat-swarm-files` item; its exe is signed by ROCCAT GmbH). Every archive passes
 `7z t`, and every size matches the server's. The `official_url` column holds the vendor
 URL where the vendor still serves the identical file; the script can download from there
 (`-Source TurtleBeach`). The modules contain no Swarm add-ons (Talk FX module, AlienFX,
