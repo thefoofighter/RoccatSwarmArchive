@@ -54,7 +54,7 @@ $Mirrors = @{
   GitHub     = "https://github.com/$Repo/releases/download"        # + /<tag>/<asset>
   GitHubRaw  = "https://raw.githubusercontent.com/$Repo/main"      # catalog.csv, install.ps1
   ArchiveOrg = 'https://archive.org/download/roccat-swarm-archive'  # + /<path>
-  Mega       = ''                                                   # https://mega.nz/folder/<id>#<key>
+  Mega       = 'https://mega.nz/folder/3UxDgSKK#wNGE-jPvBYINz8F4goA0IQ'   # public folder link with its key
 }
 
 # --- PowerShell 5.1 or later (Windows 7 ships 2.0). Keep this block PowerShell 2.0 syntax. ------

@@ -314,7 +314,7 @@ release asset, mirror path and vendor URL. GitHub shows it as a searchable table
 | --------------- | ----------------------------------------------------------------------------- |
 | GitHub releases | <https://github.com/thefoofighter/RoccatSwarmArchive/releases>                |
 | archive.org     | <https://archive.org/details/roccat-swarm-archive>                            |
-| MEGA            | link to follow                                                                |
+| MEGA            | <https://mega.nz/folder/3UxDgSKK#wNGE-jPvBYINz8F4goA0IQ>                      |
 | Turtle Beach    | The vendor's own servers, while they stay online (most files)                 |
 
 On archive.org and MEGA the files sit in the folders `swarm/<version>/`,
