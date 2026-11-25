@@ -351,7 +351,8 @@ function Get-MegaFolder {
   $handle = $Matches[1]
   $shareKey = ConvertFrom-Base64Url $Matches[2]
   if ($shareKey.Length -ne 16) { throw 'the MEGA folder key is not 16 bytes' }
-  $resp = Invoke-MegaApi @{ a = 'f'; c = 1; ca = 1; r = 1 } $handle
+  # No "ca" (cache allowed) flag: with it, MEGA can answer with an old listing.
+  $resp = Invoke-MegaApi @{ a = 'f'; c = 1; r = 1 } $handle
   $nodes = @{}
   foreach ($n in $resp.f) {
     if (-not $n.k) { continue }
@@ -390,7 +391,10 @@ function Get-MegaFolder {
     }
     $node.Path = $parts -join '/'
   }
-  $script:MegaFolder = [pscustomobject]@{ Handle = $handle; Files = @($nodes.Values | Where-Object { $_.Type -eq 0 }) }
+  # An older version of a file is a child of the newer file node: leave those out.
+  $current = @($nodes.Values | Where-Object {
+      $_.Type -eq 0 -and -not ($_.Parent -and $nodes.ContainsKey($_.Parent) -and $nodes[$_.Parent].Type -eq 0) })
+  $script:MegaFolder = [pscustomobject]@{ Handle = $handle; Files = $current }
   return $script:MegaFolder
 }
 
@@ -398,7 +402,8 @@ function Save-MegaFile([string]$Path, [string]$Dest, $Row) {
   Initialize-AesCtr
   $folder = Get-MegaFolder
   # The folder may be the archive root or a folder above it: match the path's end.
-  $hit = $folder.Files | Where-Object { $_.Path -eq $Path -or $_.Path.EndsWith("/$Path") } | Select-Object -First 1
+  $hit = @($folder.Files | Where-Object { $_.Path -eq $Path }) + @($folder.Files | Where-Object { $_.Path.EndsWith("/$Path") }) |
+    Select-Object -First 1
   if (-not $hit) {
     $name = ($Path -split '/')[-1]
     $byName = @($folder.Files | Where-Object { $_.Name -eq $name -and (-not $Row -or $_.Size -eq [long]$Row.size) })
