@@ -1,166 +1,223 @@
+<div align="center">
+
 # ROCCAT Swarm Archive
 
-ROCCAT Swarm (v1) is abandoned. Swarm downloads a "module" for each device the first time
-you connect it. Builds up to 1.9478 can no longer do this: their update server is gone.
-The last build, 1.9482, uses a Turtle Beach server that still answers, but nothing
-promises that it stays online. This archive keeps every official Swarm installer, all 55
-device modules, the pre-Swarm drivers and the add-ons. It also gives you a script that
-installs them, with no update server.
+**Keep ROCCAT Swarm working.**<br>
+Every Swarm installer, all 55 device modules and the pre-Swarm drivers,<br>
+with a one-line installer that needs no update server.
 
-* **Script:** one PowerShell command. It installs Swarm if it is missing, finds your
-  ROCCAT devices, and installs only the modules you need.
-* **Manual:** download the files from the [releases](https://github.com/thefoofighter/RoccatSwarmArchive/releases).
-  [`catalog.csv`](catalog.csv) lists every file, with its device, USB PIDs and SHA-256.
-* **Mirrors:** GitHub releases, archive.org and MEGA hold the same files. The script
-  checks every file against its SHA-256 and changes to the next mirror if one fails.
+[![Windows 7 | 10 | 11](https://img.shields.io/badge/Windows-7%20%7C%2010%20%7C%2011-0078d4)](#requirements)
+[![PowerShell 5.1+](https://img.shields.io/badge/PowerShell-5.1%2B-5391fe)](#requirements)
+[![Swarm builds](https://img.shields.io/badge/Swarm-24%20builds-c8102e)](#whats-in-the-archive)
+[![Device modules](https://img.shields.io/badge/device%20modules-55-c8102e)](#supported-devices)
+[![SHA-256 verified](https://img.shields.io/badge/files-SHA--256%20verified-2ea44f)](catalog.csv)
 
-The offline install method was tested on Windows 10 x64 with Swarm 1.9482 and the Kone
-AIMO Remastered, with the network blocked.
+[Quick start](#quick-start) •
+[Install by hand](#install-by-hand) •
+[Downloads](https://github.com/thefoofighter/RoccatSwarmArchive/releases) •
+[Supported devices](#supported-devices) •
+[Troubleshooting](#troubleshooting)
+
+</div>
 
 ---
 
-## Install with the script
+> [!TIP]
+> **Prefer to install by hand?** Every file is a direct download in the
+> [Releases](https://github.com/thefoofighter/RoccatSwarmArchive/releases):
+> [Swarm installers](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/swarm) ·
+> [device modules](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/modules) ·
+> [drivers](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/drivers) ·
+> [add-ons and extras](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/extras).
+> The steps are in [Install by hand](#install-by-hand).
 
-You need Windows 10 or 11 and an account with administrator rights.
+## About
 
-1. Open PowerShell (Start menu, type `powershell`, press Enter).
+ROCCAT Swarm (v1) is the configuration software for ROCCAT mice, keyboards and headsets.
+Turtle Beach no longer develops it. Swarm downloads a **device module** the first time you
+connect a device, and without that module the device has no configuration page.
 
-2. Paste this command and press Enter:
+Swarm builds up to 1.9478 can no longer download modules: their update server is gone.
+The last build, 1.9482, uses a Turtle Beach server that still answers, but nothing
+promises that it stays online. This archive keeps all the files, so Swarm keeps working
+with no update server at all.
 
-   ```powershell
-   irm https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1 | iex
-   ```
+## Features
 
-   You prefer to read the script first? Download
-   [`install.ps1`](https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1),
-   read it, then right-click it and select **Run with PowerShell**.
+- **One command.** It installs Swarm if it is missing, finds your ROCCAT devices, and
+  installs only the modules they need.
+- **No double work.** It skips modules that are already installed at the same or a newer
+  version.
+- **Verified files.** It checks every file against its SHA-256 before it uses it.
+- **Four sources.** GitHub, archive.org, MEGA and Turtle Beach's own servers. When one
+  source fails, the script uses the next one.
+- **Offline installs.** Download the files once on any PC, then install on a PC with no
+  internet.
+- **Complete.** 24 Swarm builds (2015 to 2026), 55 device modules with their firmware, and
+  drivers for 26 older devices that Swarm never supported.
 
-3. Click **Yes** in the Windows administrator prompt.
+## Quick start
 
-4. Select **1 Quick setup**. The script installs Swarm 1.9482 if it is missing, then the
-   modules for the ROCCAT devices that are plugged in. The Swarm installer opens: click
-   through it and keep the default folder.
+> **Requirements:** Windows 10 or 11 and an account with administrator rights.
+> Windows 7: see [Windows 7](#windows-7).
 
-The menu:
+Open PowerShell (Start menu, type `powershell`, press Enter) and run:
+
+```powershell
+irm https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1 | iex
+```
+
+1. Click **Yes** in the Windows administrator prompt.
+2. Select **1 Quick setup**.
+3. If Swarm is not installed, its installer opens. Click through it and keep the default
+   folder.
+
+That is all. Swarm starts with a full configuration page for each connected device.
+
+> [!TIP]
+> **You connect a new device later?** Run the command again and select **1**. The script
+> installs only the module for the new device.
+
+<details>
+<summary><b>Read the script before you run it</b></summary>
+<br>
+
+Download [`install.ps1`](https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1)
+and read it. Then right-click it and select **Run with PowerShell**, or run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+</details>
+
+## Using the installer
+
+### Menu
 
 | Option                        | What it does                                                                 |
 | ----------------------------- | ---------------------------------------------------------------------------- |
 | 1 Quick setup                 | Swarm (if missing) + the modules for the connected devices                   |
-| 2 Install device modules      | Pick modules from a list (also for devices that are not plugged in)          |
+| 2 Install device modules      | Pick modules from a list, also for devices that are not connected            |
 | 3 Install a Swarm version     | Any of the 24 archived builds. 1.9482 is the one to use                      |
 | 4 Install a standalone driver | Drivers for devices that Swarm never supported, for example the Kave XTD 5.1 |
 | 5 Install an add-on           | ROCCAT Talk FX                                                               |
-| 6 Download only               | Save files to a folder for a PC with no internet                             |
-| 7 Change the download source  | GitHub, archive.org, MEGA, Turtle Beach's own servers, or a local folder     |
+| 6 Download only               | Save the files to a folder for a PC with no internet                         |
+| 7 Change the download source  | GitHub, archive.org, MEGA, Turtle Beach's servers, or a local folder         |
 
-**You connect a new device later?** Run the command again and select **1**. It skips the
-modules that you already have and installs only the new one. Modules that are installed
-at the same or a newer version are always skipped.
+### Command-line options
 
-### Options (no menu)
-
-Add options to the command like this:
+Add options to the one-line command like this:
 
 ```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1))) -Auto
 ```
 
-With a downloaded copy, use `powershell -ExecutionPolicy Bypass -File install.ps1 -Auto`.
+| You want to                                                     | Option                                          |
+| --------------------------------------------------------------- | ----------------------------------------------- |
+| See what is installed and what the script finds (no changes)    | `-List`                                         |
+| Run the quick setup with no menu                                | `-Auto`                                         |
+| Install named modules (`id` from `catalog.csv`, or a USB PID)   | `-Modules kone-aimo-remastered,3098`            |
+| Install every module                                            | `-AllModules`                                   |
+| Install a Swarm build (`latest` = 1.9482) with no installer window | `-Swarm latest -Silent`                      |
+| Install a standalone driver                                     | `-Driver kave-xtd-5-1-digital`                  |
+| Prefer a source                                                 | `-Source ArchiveOrg` (or `Mega`, `TurtleBeach`) |
+| Use only that source                                            | add `-NoFallback`                               |
+| Reinstall modules that are already installed                    | add `-Force`                                    |
 
-| You want to                                                       | Option                                         |
-| ----------------------------------------------------------------- | ---------------------------------------------- |
-| See what is installed and what the script finds (changes nothing) | `-List`                                        |
-| Quick setup                                                       | `-Auto`                                        |
-| Install named modules (`id` from `catalog.csv`, or a USB PID)     | `-Modules kone-aimo-remastered,3098`           |
-| Install every module                                              | `-AllModules`                                  |
-| Install a Swarm build (`latest` = 1.9482) with no installer window | `-Swarm latest -Silent`                        |
-| Install a standalone driver                                       | `-Driver kave-xtd-5-1-digital`                 |
-| Prefer a mirror                                                   | `-Source ArchiveOrg` (or `Mega`, `TurtleBeach`) |
-| Use only that mirror                                              | add `-NoFallback`                              |
-| Reinstall modules that are already installed                      | add `-Force`                                   |
+<details>
+<summary><b>More options</b></summary>
+<br>
 
-Other options: `-SwarmDir <folder>` (Swarm is not in the default folder), `-NoRestart`
-(do not start Swarm after a module install), `-Source Local -LocalDir <folder>` (use a
-copy of the archive on disk).
+| Option                             | What it does                                     |
+| ---------------------------------- | ------------------------------------------------ |
+| `-SwarmDir <folder>`               | Swarm is not in the default folder               |
+| `-NoRestart`                       | Do not start Swarm after a module install        |
+| `-Source Local -LocalDir <folder>` | Use a copy of the archive on disk                |
+| `-DownloadOnly -OutDir <folder>`   | Download and check the files; install nothing    |
+| `-Everything`                      | With `-DownloadOnly`: every file in the archive  |
 
-### A PC with no internet
+With a downloaded copy of the script, use
+`powershell -ExecutionPolicy Bypass -File install.ps1 <options>`.
 
-1. On a PC with internet, start the script and select **6 Download only**. Option 1
-   there saves Swarm 1.9482 and all 55 modules (about 400 MB) to a folder.
-2. Copy the folder to the other PC (USB drive). It holds the files, `catalog.csv` and
-   `install.ps1`.
+</details>
+
+### PCs with no internet
+
+1. On a PC with internet, run the script and select **6 Download only**. Option 1 there
+   saves Swarm 1.9482 and all 55 modules (about 400 MB).
+2. Copy the folder to the other PC, for example on a USB drive. It holds the files,
+   `catalog.csv` and `install.ps1`.
 3. On the other PC, run `install.ps1` from that folder. The script uses the files next to
    it and downloads nothing.
 
 ### Windows 7
 
-The devices are standard USB devices, and Swarm 1.9482 should run on Windows 7 SP1: it is
-built with Qt 5 and a bundled Visual C++ 2013 runtime, and it calls no Windows 8 or later
-functions. Nobody has tested it on Windows 7 yet. Older Swarm builds officially supported
-Windows 7.
+<a id="requirements"></a>
 
-The script needs Windows PowerShell 5.1, and Windows 7 comes with 2.0:
+The script needs **Windows PowerShell 5.1**. Windows 10 and 11 have it. Windows 7 comes with
+version 2.0, and the script then stops and tells you what to install.
 
-1. Install [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631) and
-   [Windows Management Framework 5.1](https://www.microsoft.com/download/details.aspx?id=54616)
+<details>
+<summary><b>Set up Windows 7 SP1</b></summary>
+<br>
+
+1. Install [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631).
+2. Install [Windows Management Framework 5.1](https://www.microsoft.com/download/details.aspx?id=54616)
    (`Win7AndW2K8R2-KB3191566-x64.zip`, or `-x86` for 32-bit Windows). Restart.
-2. Windows 7 does not switch on TLS 1.2 by itself, so use this command instead of the
-   `irm` one:
+3. Windows 7 does not switch on TLS 1.2 by itself. Use this command instead of the `irm`
+   one:
 
    ```powershell
    [Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/thefoofighter/RoccatSwarmArchive/main/install.ps1'))
    ```
 
-Without PowerShell 5.1, the script stops and says what to install. You can also skip the
-script: download the files on another PC (**6 Download only**), copy them over, and
-install by hand (below).
+You can also skip the script: download the files on another PC (**6 Download only**),
+copy them over, and [install by hand](#install-by-hand).
 
----
+</details>
+
+> [!NOTE]
+> Swarm 1.9482 should run on Windows 7 SP1. It is built with Qt 5 and a bundled
+> Visual C++ 2013 runtime, and it calls no Windows 8 or later functions. Nobody has tested
+> it on Windows 7 yet. Older Swarm builds officially supported Windows 7.
 
 ## Install by hand
 
-### 1. Install Swarm
+The manual install puts the same files in the same place as the script.
 
-1. Download [`ROCCAT-Swarm_1.9482.zip`](https://github.com/thefoofighter/RoccatSwarmArchive/releases/download/swarm/ROCCAT-Swarm_1.9482.zip).
-2. Unzip it and run `ROCCAT Swarm_v19482.exe`. Keep the default folder:
-   `C:\Program Files (x86)\ROCCAT\ROCCAT Swarm\`.
-3. Swarm can start and show "no device" or "downloading". That is normal. Close it before
-   the next step.
+**1. Install Swarm.** Download
+[`ROCCAT-Swarm_1.9482.zip`](https://github.com/thefoofighter/RoccatSwarmArchive/releases/download/swarm/ROCCAT-Swarm_1.9482.zip),
+unzip it and run `ROCCAT Swarm_v19482.exe`. Keep the default folder,
+`C:\Program Files (x86)\ROCCAT\ROCCAT Swarm\`. Swarm can start and show "no device" or
+"downloading": that is normal. Close Swarm before the next step.
 
-### 2. Find the module for your device
-
-Find your device in [`catalog.csv`](catalog.csv) (rows with `kind` = `module`). The
-`pids` column holds its USB product IDs, and `asset` is the file name in the
-[modules release](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/modules).
-If you do not know your device's PID, plug the device in and run this in PowerShell:
+**2. Find the module for your device.** Find your device in [`catalog.csv`](catalog.csv)
+(rows with `kind` = `module`). The `pids` column holds its USB product IDs, and `asset` is
+the file name in the [modules release](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/modules).
+To find your device's PID, connect it and run:
 
 ```powershell
 Get-PnpDevice -PresentOnly | Where-Object InstanceId -match 'VID_1E7D' | Select-Object -ExpandProperty InstanceId -Unique
 ```
 
-The `PID_XXXX` part of the output is the PID. Ignore PIDs that start with `A2`, `50` or
-`00B`: they show the firmware-update mode. Replug the device and run the command again.
+The `PID_XXXX` part is the PID. PIDs that start with `A2`, `50` or `00B` show the
+firmware-update mode: disconnect the device, connect it again, and run the command again.
+Optional: compare `Get-FileHash <file>` with the `sha256` column.
 
-Download the module file (`.7z`). Optional: run `Get-FileHash <file>` and compare the
-result with the `sha256` column.
+**3. Stop Swarm.** Right-click the Swarm icon in the notification area and select **Exit**.
+Or end `ROCCAT_Swarm.exe`, `ROCCAT_Swarm_Monitor.exe` and `ROCCAT_dev_service.exe` in Task
+Manager.
 
-### 3. Stop Swarm
-
-Right-click the Swarm icon in the notification area and select **Exit**. Or open Task
-Manager and end `ROCCAT_Swarm.exe`, `ROCCAT_Swarm_Monitor.exe` and `ROCCAT_dev_service.exe`.
-
-### 4. Extract the module into the Swarm folder
-
-Open PowerShell **as administrator** in the folder with the module file. Use the 7-Zip
-copy that comes with Swarm (example for the Kone AIMO Remastered):
+**4. Extract the module into the Swarm folder.** Open PowerShell **as administrator** in
+the folder with the module file, and use the 7-Zip copy that comes with Swarm:
 
 ```powershell
 & 'C:\Program Files (x86)\ROCCAT\ROCCAT Swarm\7-Zip\7za.exe' x -y '-oC:\Program Files (x86)\ROCCAT\ROCCAT Swarm' 'kone-aimo-remastered_207-1.0009-1.0009-8052-v1.7z'
 ```
 
-You can also use 7-Zip's File Explorer menu: right-click the `.7z` file, select
-**7-Zip > Extract files...**, and set the Swarm folder as the target. Extract into the
-Swarm folder itself, not into a new subfolder. The files must land like this:
+Or right-click the `.7z` file in File Explorer, select **7-Zip > Extract files...**, and
+set the Swarm folder itself as the target. The files must land like this:
 
 ```text
 C:\Program Files (x86)\ROCCAT\ROCCAT Swarm\
@@ -169,92 +226,144 @@ C:\Program Files (x86)\ROCCAT\ROCCAT Swarm\
     KONE_AIMO_16K\        <- from kone-aimo-remastered_....7z
       KONE_AIMO.dll       (the device plugin)
       firmware\           (firmware image + firmware_upgrade.ini)
-      version.ini         <- if this file is here, the module is in the right place
+      version.ini         <- when this file is here, the module is in the right place
 ```
 
-The `module_dirs` column of `catalog.csv` shows the folder each module creates. Repeat
-this step for each device. A module for a device that is not connected does nothing until
-you connect the device.
+The `module_dirs` column of `catalog.csv` shows the folder that each module creates.
+Repeat this step for each device. A module for a device that is not connected does nothing
+until you connect the device.
 
-### 5. Start Swarm
+**5. Start Swarm.** Your device appears with its full configuration page.
 
-Start Swarm. Your device appears with its full configuration page.
-
-### Standalone drivers (devices that Swarm never supported)
+<details>
+<summary><b>Standalone drivers (devices that Swarm never supported)</b></summary>
+<br>
 
 Download the driver from the [drivers release](https://github.com/thefoofighter/RoccatSwarmArchive/releases/tag/drivers),
 unzip it, and run its `Setup.exe`. Example: the Kave XTD 5.1 Digital uses
 `kave-xtd-5-1-digital_63-2.19-1.00-6127-v1.zip`, which holds
-`ROCCAT_KaveXTD_DRV2.19\Setup.exe`. The Arvo, Pyra and Valo drivers are `.rar` files:
-open them with [7-Zip](https://www.7-zip.org).
+`ROCCAT_KaveXTD_DRV2.19\Setup.exe`. The Arvo, Pyra and Valo drivers are `.rar` files: open
+them with [7-Zip](https://www.7-zip.org).
 
----
+</details>
+
+## Supported devices
+
+**Swarm device modules (55).** Each module adds one device, or a device family, to Swarm.
+
+| Type                     | Devices |
+| ------------------------ | ------- |
+| Mice (26)                | Burst Core · Burst Pro · Burst Pro Air · Kain 100 AIMO · Kain 120 AIMO · Kain 200 AIMO · Kiro · Kone AIMO · Kone AIMO Remastered · Kone Air · Kone EMP · Kone Pro · Kone Pro Air · Kone Pure Owl-Eye · Kone Pure SE · Kone Pure SEL · Kone Pure Ultra · Kone Pure Ultra iCafe · Kone XP · Kone XP Air · Kova · Kova AIMO · Leadr · Nyth · Pure Air · Pure SEL |
+| Keyboards (22)           | Horde · Horde AIMO · Isku+ · Isku+ Force FX · Magma · Magma Mini · Pyro · Ryos MK FX · Skeltr · Sova · Suora · Suora FX · Vulcan 80 · Vulcan 100 AIMO · Vulcan 120/121/122 AIMO · Vulcan II · Vulcan II Max · Vulcan II Mini · Vulcan II Mini Air · Vulcan Pro · Vulcan TKL AIMO · Vulcan TKL Pro |
+| Headsets and audio (6)   | Elo 7.1 Air · Elo 7.1 USB · Khan AIMO · Syn Max Air · Syn Pro Air · Torch (microphone) |
+| Mousepads (1)            | Sense AIMO / XXL |
+
+**Standalone drivers (26 devices).** For older devices that Swarm never supported.
+
+| Type                     | Devices |
+| ------------------------ | ------- |
+| Mice (15)                | Kone (original) · Kone[+] · Kone Pure · Kone Pure Color · Kone Pure Military · Kone Pure Optical · Kone Pure Optical Black/White Edition · Kone XTD · Kone XTD Optical · Kova[+] · Lua · Pyra Wired · Pyra Wireless · Savu · Tyon |
+| Keyboards (8)            | Arvo · Isku · Isku FX · Ryos MK · Ryos MK Glow · Ryos MK Pro · Ryos TKL Pro · Valo |
+| Audio (3)                | Kave XTD 5.1 Digital · Kulo 7.1 USB · Juke (USB sound card) |
+
+The archive also holds the Kone XTD driver for macOS, the only Mac driver known to exist.
 
 ## Which Swarm build?
 
-Use **1.9482**, the last build. Builds up to 1.9478 point at ROCCAT's update server,
-which is gone, so they cannot download anything. 1.9479 and later use Turtle Beach's
-server. The offline module install was tested with 1.9482 only. Older builds are here for
+Use **1.9482**, the last build. Builds up to 1.9478 point at ROCCAT's update server, which
+is gone, so they cannot download anything. 1.9479 and later use Turtle Beach's server.
+The offline module install was tested with 1.9482 only. The older builds are here for
 preservation.
 
 ## Troubleshooting
 
-| Problem                                                                       | What to do                                                                                                                                                   |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "running scripts is disabled on this system"                                  | Use the `irm` command above, or start a downloaded copy with `powershell -ExecutionPolicy Bypass -File install.ps1`.                                          |
-| "Could not create SSL/TLS secure channel" (Windows 7, old Windows 10)         | Use the Windows 7 command above: it switches on TLS 1.2 first.                                                                                               |
-| "Could not establish trust relationship" (Windows 7)                          | The root certificates are out of date. Run Windows Update, or download the files on another PC (**6 Download only**).                                       |
-| A download fails                                                              | The script tries the next mirror. To force one: `-Source ArchiveOrg -NoFallback`.                                                                            |
-| "SHA-256 does not match"                                                      | The mirror sent a damaged or different file. The script deletes it and tries the next mirror.                                                                |
-| "Access denied" when you extract by hand                                      | Use PowerShell or 7-Zip as administrator, or use the script.                                                                                                 |
-| The device does not appear after a restart                                    | Make sure `...\ROCCAT Swarm\data\<DEVICE>\version.ini` exists. Look in `%APPDATA%\ROCCAT\SWARM\log\monitor\` for the device PID.                             |
-| You do not know which of two modules is yours (for example Vulcan 100 or 120) | Install both. Only the matching module activates.                                                                                                            |
-| Swarm offers a firmware update                                                | The firmware images ship inside each module. Update only on purpose: a failed flash can make the device unusable. Do not unplug the device during an update. |
+| Problem                                                              | What to do                                                                                                                          |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| "running scripts is disabled on this system"                         | Use the `irm` command, or start a downloaded copy with `powershell -ExecutionPolicy Bypass -File install.ps1`.                       |
+| "Could not create SSL/TLS secure channel" (Windows 7, old Windows 10) | Use the [Windows 7](#windows-7) command: it switches on TLS 1.2 first.                                                              |
+| "Could not establish trust relationship" (Windows 7)                 | The root certificates are out of date. Run Windows Update, or download the files on another PC (**6 Download only**).               |
+| A download fails                                                     | The script tries the next source. To force one: `-Source ArchiveOrg -NoFallback`.                                                   |
+| "SHA-256 does not match"                                             | The source sent a damaged or different file. The script deletes it and tries the next source.                                       |
+| "Access denied" when you extract by hand                             | Use PowerShell or 7-Zip as administrator, or use the script.                                                                        |
+| The device does not appear after a restart                           | Make sure `...\ROCCAT Swarm\data\<DEVICE>\version.ini` exists. Look in `%APPDATA%\ROCCAT\SWARM\log\monitor\` for the device PID.    |
+| You do not know which of two modules is yours (Vulcan 100 or 120)    | Install both. Only the matching module activates.                                                                                   |
 
-## What is in this archive
+> [!WARNING]
+> Each module carries the firmware images for its device, and Swarm can offer a firmware
+> update. Update only on purpose: a failed flash can make the device unusable. Do not
+> disconnect the device during an update.
 
-| Release / folder | Contents                                                                                  |
-| ---------------- | ----------------------------------------------------------------------------------------- |
-| `swarm`          | ROCCAT Swarm installers, 24 builds from 1.30 (2015) to 1.9482 (2026)                      |
-| `modules`        | The 55 device modules from Swarm's update server (plugin DLL, firmware, keyboard layouts) |
-| `drivers`        | Windows drivers for 26 pre-Swarm devices, and the one known macOS driver (Kone XTD)       |
-| `extras`         | Talk FX 2.6, the Power-Grid SDK 1.1, Swarm II, Swarm's self-update package, `aim_roccat`  |
+## What's in the archive
 
-On archive.org and MEGA the same files sit in the folders `swarm/<version>/`,
-`modules/<device>/`, `drivers/<device>/`, `addons/`, `sdk/` and `other/` (the `path`
-column of `catalog.csv`). The git repository holds only `install.ps1`, `catalog.csv`,
-this README and two maintainer tools.
+The git repository holds only `install.ps1`, `catalog.csv`, this README and two maintainer
+tools. The files themselves are release assets and mirror copies.
 
-### Where the files came from
+| Release   | Contents                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------ |
+| `swarm`   | ROCCAT Swarm installers: 24 builds from 1.30 (2015) to 1.9482 (2026)                       |
+| `modules` | The 55 device modules from Swarm's update server (plugin DLL, firmware, keyboard layouts)  |
+| `drivers` | Windows drivers for 26 pre-Swarm devices, and the macOS driver for the Kone XTD            |
+| `extras`  | Talk FX 2.6, the Power-Grid SDK 1.1, Swarm II, Swarm's self-update package, `aim_roccat`  |
 
-Captured 2026-11-19 to 2026-11-21, from Turtle Beach's support CDN, Swarm's auto-update
-service, ROCCAT's legacy CDN (still online), and Wayback Machine copies of
-`media.roccat.org` (Swarm 1.30 to 1.9388, the Mac driver, the Power-Grid SDK, `aim_roccat`).
-Two installers are community uploads from archive.org: Swarm 1.9477, and Swarm 1.9349
-(from the 2019 `roccat-swarm-files` item; its exe is signed by ROCCAT GmbH). Every archive passes
-`7z t`, and every size matches the server's. The `official_url` column holds the vendor
-URL where the vendor still serves the identical file; the script can download from there
-(`-Source TurtleBeach`). The modules contain no Swarm add-ons (Talk FX module, AlienFX,
-Swarm Connect, Waves driver): the update server no longer hands them out.
+[`catalog.csv`](catalog.csv) lists every file: its device, version, USB PIDs, SHA-256,
+release asset, mirror path and vendor URL. GitHub shows it as a searchable table.
 
-## Mirrors
+### Mirrors
 
 | Mirror          | Where                                                                         |
 | --------------- | ----------------------------------------------------------------------------- |
 | GitHub releases | <https://github.com/thefoofighter/RoccatSwarmArchive/releases>                |
-| archive.org     | <https://archive.org/details/roccat-swarm-archive> (also holds `install.ps1`) |
+| archive.org     | <https://archive.org/details/roccat-swarm-archive>                            |
 | MEGA            | link to follow                                                                |
-| Turtle Beach    | the vendor's own servers, while they stay online (most files)                 |
+| Turtle Beach    | The vendor's own servers, while they stay online (most files)                 |
 
-## Maintainers
+On archive.org and MEGA the files sit in the folders `swarm/<version>/`,
+`modules/<device>/`, `drivers/<device>/`, `addons/`, `sdk/` and `other/` (the `path`
+column of `catalog.csv`). Both also hold `install.ps1`, in case GitHub is not available.
 
-`tools/build-catalog.ps1` checks `catalog.csv` against the files and fills in sizes,
-hashes and module folders. `tools/publish.ps1` uploads to GitHub releases or archive.org;
-its help (`Get-Help tools\publish.ps1 -Full`) also gives the MEGA steps.
+<details>
+<summary><b>Where the files came from</b></summary>
+<br>
+
+The files were captured from 19 to 21 November 2026 from:
+
+- Turtle Beach's support CDN and Swarm's auto-update service;
+- ROCCAT's legacy CDN, which is still online;
+- Wayback Machine copies of `media.roccat.org`: Swarm 1.30 to 1.9388, the Mac driver, the
+  Power-Grid SDK and the `aim_roccat` map.
+
+Two installers are community uploads from archive.org: Swarm 1.9477, and Swarm 1.9349
+from the 2019 `roccat-swarm-files` item (its exe is signed by ROCCAT GmbH). Every archive
+passes `7z t`, and every size matches the server's. The `official_url` column holds the
+vendor URL where the vendor still serves the identical file; the script can download from
+there with `-Source TurtleBeach`.
+
+The modules do not include Swarm's add-on modules (Talk FX module, AlienFX, Swarm Connect,
+Waves driver). The update server no longer hands them out, and no copy was found.
+
+</details>
+
+<details>
+<summary><b>For maintainers</b></summary>
+<br>
+
+- `tools/build-catalog.ps1` checks `catalog.csv` against the files and fills in sizes,
+  hashes and module folders.
+- `tools/publish.ps1` uploads to GitHub releases or archive.org. Its help
+  (`Get-Help tools\publish.ps1 -Full`) also gives the MEGA steps.
+
+</details>
 
 ## Legal
 
+> [!NOTE]
+> This is an unofficial preservation project. It is not affiliated with Turtle Beach or
+> ROCCAT. ROCCAT, Swarm and the product names are trademarks of their owners.
+
 Swarm, the modules, the firmware images and the drivers are the copyright of Turtle Beach
-(ROCCAT). The product is discontinued, and the vendor no longer offers most of these
-files. They are unmodified copies of the vendor's downloads. If you hold the rights and
+(ROCCAT). The product is discontinued, and the vendor no longer offers most of these files.
+The archive holds unmodified copies of the vendor's downloads. If you hold the rights and
 want a file removed, open an issue.
+
+This archive is part of ElderHive, a project to build a free, open-source replacement for
+Swarm.
