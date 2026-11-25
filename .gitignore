@@ -1,0 +1,17 @@
+# The binaries are not in git. They are GitHub release assets, and they are on archive.org
+# and MEGA with the same folder layout. See docs/MAINTAINERS.md.
+*.zip
+*.7z
+*.rar
+*.pkg
+*.exe
+*.msi
+*.part
+
+# Maintainer scratch space (fetch tools, release staging)
+_staging/
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
