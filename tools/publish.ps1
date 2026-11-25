@@ -39,6 +39,7 @@ param(
   [ValidateSet('GitHub', 'ArchiveOrg')][string]$Target = 'GitHub',
   [string]$Root = (Split-Path $PSScriptRoot -Parent),
   [string]$Gh = 'gh',            # path to gh.exe if it is not on PATH
+  [string]$Ia = 'ia',            # path to ia.exe if it is not on PATH
   [switch]$WhatIf
 )
 $ErrorActionPreference = 'Stop'
@@ -50,16 +51,17 @@ if ($LASTEXITCODE -ne 0) { throw 'catalog.csv is out of date: run tools\build-ca
 $rows = Import-Csv (Join-Path $Root 'catalog.csv')
 
 if ($Target -eq 'ArchiveOrg') {
-  if (-not (Get-Command ia -ErrorAction SilentlyContinue)) { throw 'needs the internetarchive tool: pip install internetarchive, then ia configure' }
+  if (-not (Get-Command $Ia -ErrorAction SilentlyContinue)) { throw 'needs the internetarchive tool: pip install internetarchive, then ia configure (or pass -Ia <path to ia.exe>)' }
   $item = ([regex]::Match($installer, "ArchiveOrg = '([^']+)'").Groups[1].Value -split '/')[-1]
-  # Paths relative to the root, so the item keeps the folder tree.
+  # Paths relative to the root. --keep-directories makes each path the remote name, so the
+  # item keeps the folder tree (without it, ia keeps only the file name).
   $files = @($rows.path | Sort-Object -Unique) + @('install.ps1', 'catalog.csv', 'README.md')
   $meta = @('--metadata=mediatype:software', '--metadata=title:ROCCAT Swarm Archive',
     '--metadata=description:ROCCAT Swarm (v1) installers, device modules, pre-Swarm drivers and add-ons, with an installer script (install.ps1). Index: catalog.csv.',
     '--metadata=subject:ROCCAT;Swarm;Turtle Beach;drivers')
   Write-Host "archive.org item '$item': $($files.Count) files"
   if ($WhatIf) { $files | ForEach-Object { Write-Host "would upload $_" }; exit 0 }
-  & ia upload $item @files @meta --checksum --retries 10
+  & $Ia upload $item @files @meta --keep-directories --checksum --retries 10
   if ($LASTEXITCODE -ne 0) { throw 'ia upload failed' }
   Write-Host "Done. Test: install.ps1 -Source ArchiveOrg -NoFallback -Swarm latest -AllModules -DownloadOnly -OutDir <empty folder>"
   exit 0
